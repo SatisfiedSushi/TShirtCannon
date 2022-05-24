@@ -23,6 +23,13 @@ public final class Constants {
     public static int motor_climbLeft = 6;
     public static int motor_climbRight = 7;
 
-    //Encorder stuffs
+    // Encoder stuffs
     public static double driveGearing = 1.0/60.0;
+
+    // Math & physics
+    public static double Patm = 1.0; // atmospheric pressure in atm
+    public static double A = 1.0; // cross-sectional area of the barrel in meters^2
+    public static double L = 1.0; // length of the barrel in meters
+    public static double V0 = 5.0; // volume of air tank in liters
+    public static double m = 0.1; // mass of projectile (t-shirt) in kg
 }
