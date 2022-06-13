@@ -107,5 +107,6 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Right Output",m_right1.get());
     SmartDashboard.putNumber("Left Position",this.getPosition(false));
     SmartDashboard.putNumber("Right Position",this.getPosition(true));
+    SmartDashboard.putData("Differential Drive", drive);
   }
 }

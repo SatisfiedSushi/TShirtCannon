@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LEDs;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.Shooter;
-
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -24,13 +25,9 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-<<<<<<< Updated upstream
-  public LEDs m_leds;
-=======
   public static Shooter m_shooter;
 
   public XboxController xbox = new XboxController(0);
->>>>>>> Stashed changes
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -41,12 +38,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-<<<<<<< Updated upstream
-=======
     m_shooter = new Shooter();
 
     
->>>>>>> Stashed changes
   }
 
   /**
@@ -93,6 +87,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+
+    m_teleopCommand = m_robotContainer.getTeleopCommand();
+
+    // Schedule teleop command
+    if(m_teleopCommand != null) {
+      m_teleopCommand.schedule();
+    }
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -105,16 +107,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-<<<<<<< Updated upstream
-
-    m_teleopCommand = m_robotContainer.getTeleopCommand();
-
-    // Schedule teleop command
-    if(m_teleopCommand != null) {
-      m_teleopCommand.schedule();
-    }
-
-=======
     if (xbox.getAButton()) {
       m_shooter.CompressorOn();
     } else if (xbox.getBButton()) {
@@ -128,7 +120,6 @@ public class Robot extends TimedRobot {
     }
     
     SmartDashboard.putNumber("Air Pressure", m_shooter.analogPressureInputToPSI());
->>>>>>> Stashed changes
   }
 
   @Override
