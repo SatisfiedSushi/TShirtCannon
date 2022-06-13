@@ -19,11 +19,13 @@ public class LEDs {
     private java.util.Timer timer = new java.util.Timer();
 	private TimerTask task;
 
-    private int milliseconds_per_update;
+    private int milliseconds_per_update = 100;
 
     public LEDs () {
         led_strip = new AddressableLED(Constants.LED_strip_pwm_port);
         led_strip_buffer = new AddressableLEDBuffer(Constants.LED_strip_length);
+        led_strip.setLength(Constants.LED_strip_length);
+        //setSolidColor(Color.kRed);
     }
     
     //with help from https://github.com/FRC-5013-Park-Hill-Robotics/5013-RapidReact/blob/b6f5d2a92cf5d6f639c43996f79c8823e12cce8f/src/main/java/frc/robot/trobot5013lib/led/TrobotAddressableLED.java#L53
@@ -34,18 +36,22 @@ public class LEDs {
         }
         task = new TimerTask() {
             public void run() {
+                led_strip.setLength(Constants.LED_strip_length);
                 led_strip.setData(led_strip_buffer);
+                led_strip.start();
             }
         };
         timer.scheduleAtFixedRate(
                 task,
                 20, // run first occurrence in 20ms
-                milliseconds_per_update //updates every 20ms
+                milliseconds_per_update
             ); 
     }
 
     public void setPattern() {
+        led_strip.setLength(Constants.LED_strip_length);
         led_strip.setData(led_strip_buffer);
+        led_strip.start();
     }
     
 
@@ -86,8 +92,8 @@ public class LEDs {
 
     //"borrowed" from https://github.com/FRC-5013-Park-Hill-Robotics/5013-RapidReact/blob/main/src/main/java/frc/robot/trobot5013lib/led/ChasePattern.java
     public void BlueAndMaroonChaseLEDBuffer() {
-        milliseconds_per_update = 20;
-		Color[] color_pattern = {Color.kMaroon, Color.kLightSkyBlue};
+        milliseconds_per_update = 600;
+		Color[] color_pattern = {Color.kMaroon, Color.kLightBlue};
         int m_SegmentWidth = 3; //this is what the team in the above link had
         int numberOfColors = color_pattern.length;
 		int effectiveIndex;
@@ -106,6 +112,8 @@ public class LEDs {
     public double interval = 0.5;
     private double lastChange;
     //"borrowed" from https://github.com/FRC-5013-Park-Hill-Robotics/5013-RapidReact/blob/main/src/main/java/frc/robot/trobot5013lib/led/ChasePattern.java
+    
+    //you need to run this in a separate timer function
     public void BlinkingPattern(Color color) {
         milliseconds_per_update = 500;
         double timestamp = Timer.getFPGATimestamp();

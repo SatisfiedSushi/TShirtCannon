@@ -21,6 +21,7 @@ public class RobotContainer {
   public static XboxController controller;
   private DriveTrain driveTrain;
   public static Shooter shooter;
+  public LEDStatus leds;
   private ParallelCommandGroup teleopCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -30,10 +31,12 @@ public class RobotContainer {
     driveTrain = new DriveTrain();
 
     shooter = new Shooter();
+
+    leds = new LEDStatus();
     
     teleopCommand = new ParallelCommandGroup(
       new DriveCommand(driveTrain, ()-> -controller.getLeftY(), ()-> controller.getRightX(), ()-> controller.getRawButton(1))
-
+      //new ShootCommand(shooter, controller.getXButton(), controller.getYButton(), controller.getAButton(), controller.getBButton())
     );
   }
   

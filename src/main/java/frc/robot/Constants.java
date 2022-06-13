@@ -22,6 +22,8 @@ public final class Constants {
     //since solenoid is takes 2 amps 12 volts, and pcm can only provide 500ma 12 volts,
     //we need to use a motor controller to control the solenoid
 
+    public static int CompressorID = 9;
+
     // Encoder stuffs
     public static double driveGearing = 1.0/60.0;
 
@@ -33,6 +35,6 @@ public final class Constants {
     public static double m = 0.1; // mass of projectile (t-shirt) in kg
 
     // LED strip
-    public static int LED_strip_pwm_port = 0;
+    public static int LED_strip_pwm_port = 9;
     public static int LED_strip_length = 300;
 }
