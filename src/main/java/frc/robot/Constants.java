@@ -18,9 +18,12 @@ public final class Constants {
     public static int motor_right2 = 1;
     public static int motor_left1 = 3;
     public static int motor_left2 = 2;
+<<<<<<< Updated upstream
     public static int motor_solenoid = 5; 
     //since solenoid is takes 2 amps 12 volts, and pcm can only provide 500ma 12 volts,
     //we need to use a motor controller to control the solenoid
+=======
+>>>>>>> Stashed changes
 
     // Encoder stuffs
     public static double driveGearing = 1.0/60.0;

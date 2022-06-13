@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LEDs;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,7 +24,13 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+<<<<<<< Updated upstream
   public LEDs m_leds;
+=======
+  public static Shooter m_shooter;
+
+  public XboxController xbox = new XboxController(0);
+>>>>>>> Stashed changes
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -34,6 +41,12 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+<<<<<<< Updated upstream
+=======
+    m_shooter = new Shooter();
+
+    
+>>>>>>> Stashed changes
   }
 
   /**
@@ -56,8 +69,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
 
-    m_leds.setSolidColor(Color.kRed);
-    m_leds.setPattern();
+//    m_leds.setPattern();
 
   }
 
@@ -93,6 +105,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+<<<<<<< Updated upstream
 
     m_teleopCommand = m_robotContainer.getTeleopCommand();
 
@@ -101,6 +114,21 @@ public class Robot extends TimedRobot {
       m_teleopCommand.schedule();
     }
 
+=======
+    if (xbox.getAButton()) {
+      m_shooter.CompressorOn();
+    } else if (xbox.getBButton()) {
+      m_shooter.CompressorOff();
+    }
+
+    if (xbox.getXButton()) {
+      m_shooter.setFireSolenoid(true);
+    } else if (xbox.getYButton()) {
+      m_shooter.setFireSolenoid(false);
+    }
+    
+    SmartDashboard.putNumber("Air Pressure", m_shooter.analogPressureInputToPSI());
+>>>>>>> Stashed changes
   }
 
   @Override

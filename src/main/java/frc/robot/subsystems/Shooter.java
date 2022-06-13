@@ -8,7 +8,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Compressor;
+<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+=======
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
+
+
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+>>>>>>> Stashed changes
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,6 +33,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 //put auto shutting off compressor stuff here
 
 public class Shooter extends SubsystemBase {
+<<<<<<< Updated upstream
   //private Solenoid fireSolenoid;
 
   private final Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
@@ -49,63 +63,26 @@ public class Shooter extends SubsystemBase {
     
     pcmCompressor.enableDigital();
     System.out.println("compressor initialized");
+=======
+  DoubleSolenoid pitchSolenoid;
+  TalonSRX fireSolenoid; // we're powering the solenoid with a motor controller since it needs more power than the PCM can give
+  double scale = 250;
+  double offset = -27;
+  AnalogPotentiometer pressureTransducer = new AnalogPotentiometer(0, scale, offset);
+  private Compressor pcmCompressor = new Compressor(9, PneumaticsModuleType.CTREPCM);
+
+  public Shooter() {
+    pitchSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2); // unused
+    fireSolenoid = new TalonSRX(5);
+    fireSolenoid.configPeakCurrentLimit(2); // so we don't kill the $900 solenoid :)
+    fireSolenoid.enableCurrentLimit(true); // config stuff like this varies between motor controllers like Spark Max and Talons, double check documentation ig
+    pcmCompressor.enableDigital(); // you may also need to switch the compressor to a motor controller if they put a more powerful one
+    // compressor ran by motor controller will need you to manually shut it off in code when the pressure reaches a certain psi, so mechanical needs to install a sensor
+    // since we can't rely on the PCM to automatically stop the compressor at 120psi
+    // (theres a reason running these things off motor controllers isnt FRC legal lol)
+>>>>>>> Stashed changes
   }
   
-  @Override
-  public void periodic() {
-    super.periodic();
-
-    if (xbox.getXButton()) {
-      fire();
-    }
-    if (xbox.getYButton()) {
-      closeSolenoid();
-    }
-    if (xbox.getBButton()) {
-      CompressorOff();
-    }
-    if (xbox.getAButton()) {
-      CompressorOn();
-    }
-    if (xbox.getLeftBumperPressed()) {
-      target_pressure += 5;
-    }
-    if (xbox.getRightBumperPressed()) {
-      target_pressure -= 5;
-    }
-    if(target_pressure >= airPressureReading()) {
-      CompressorOff();
-      if(!overTargetPressure()) {
-        ready = true; //ready to fire!
-      }
-    }
-
-    SmartDashboard.putNumber("Target Pressure", target_pressure);
-    SmartDashboard.putNumber("Air Pressure Reading", airPressureReading());
-  }
-
-  public double airPressureReading() {
-    return analog_pressure_sensor.get();
-  }
-
-  public boolean overTargetPressure() {
-    if (airPressureReading() >= target_pressure + 5) { 
-      //the analog air pressure sensor can very around 1-2 psi of accuracy 
-      //when the compressor is on, and the compressor might be automatically shutoff 1-2 psi above the target pressure
-      //that's fine, and the actual shouldn't be 5 psi above the target pressure anyway, 
-      //but if it does happen to be, for whatever other reason, we can give a little warning
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public void fire() {
-    fireSolenoid.set(TalonSRXControlMode.PercentOutput, 1.0); // 100% = 12v, right amount of power for solenoid
-    wait.initialize();
-    fireSolenoid.set(TalonSRXControlMode.PercentOutput, 0.0); // 1.0 and 0.0 opens and closes the solenoid respectively
-    //fireSolenoid.set(false);
-  }
 
   public void closeSolenoid() {
     fireSolenoid.set(TalonSRXControlMode.PercentOutput, 0.0); // 1.0 and 0.0 opens and closes the solenoid respectively
@@ -151,4 +128,23 @@ public class Shooter extends SubsystemBase {
     return atm * 14.6959;
   }
 
+<<<<<<< Updated upstream
+=======
+  public double analogPressureInputToPSI() {
+
+    double psi = pressureTransducer.get();
+    return psi;
+  }
+
+  
+
+
+  // idk what these are for but they probably arent needed
+  boolean enabled = pcmCompressor.enabled();
+  boolean pressureSwitch = pcmCompressor.getPressureSwitchValue();
+  double current = pcmCompressor.getCurrent();
+  PneumaticHub hub = new PneumaticHub();
+  double pressure = hub.getPressure(0);
+
+>>>>>>> Stashed changes
 }

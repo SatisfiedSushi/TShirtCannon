@@ -18,14 +18,21 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+<<<<<<< Updated upstream
   public static XboxController controller;
   private DriveTrain driveTrain;
   public static Shooter shooter;
+=======
+  private XboxController controller;
+  //private Joystick joystick;
+  private DriveTrain driveTrain;
+>>>>>>> Stashed changes
   private ParallelCommandGroup teleopCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     controller = new XboxController(0);
+<<<<<<< Updated upstream
 
     driveTrain = new DriveTrain();
 
@@ -35,6 +42,20 @@ public class RobotContainer {
       new DriveCommand(driveTrain, ()-> -controller.getLeftY(), ()-> controller.getRightX(), ()-> controller.getRawButton(1))
 
     );
+=======
+    //joystick = new Joystick(1);
+
+    driveTrain = new DriveTrain();
+    
+    teleopCommand = new ParallelCommandGroup(
+      new DriveCommand(driveTrain, ()-> -controller.getLeftY(), ()-> controller.getRightX(), ()-> controller.getRawButton(1))
+      /*new IntakeCommand(
+        intake,
+        ()-> controller.getRightTriggerAxis(),
+        ()-> controller.getLeftTriggerAxis()
+      ),*/
+     );
+>>>>>>> Stashed changes
   }
   
   /**
@@ -42,6 +63,12 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous mode
    */
+<<<<<<< Updated upstream
+=======
+  //public Command getAutonomousCommand() {
+    //return autoCommand;
+  //}
+>>>>>>> Stashed changes
   
   /**
    * Use this to pass the teleop command to the main {@link Robot} class.
