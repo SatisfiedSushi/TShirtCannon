@@ -18,10 +18,9 @@ public final class Constants {
     public static int motor_right2 = 1;
     public static int motor_left1 = 3;
     public static int motor_left2 = 2;
-    public static int motor_arm = 5;
-    public static int motor_intake = 4;
-    public static int motor_climbLeft = 6;
-    public static int motor_climbRight = 7;
+    public static int motor_solenoid = 5; 
+    //since solenoid is takes 2 amps 12 volts, and pcm can only provide 500ma 12 volts,
+    //we need to use a motor controller to control the solenoid
 
     // Encoder stuffs
     public static double driveGearing = 1.0/60.0;
@@ -32,4 +31,8 @@ public final class Constants {
     public static double L = 1.0; // length of the barrel in meters
     public static double V0 = 5.0; // volume of air tank in liters
     public static double m = 0.1; // mass of projectile (t-shirt) in kg
+
+    // LED strip
+    public static int LED_strip_pwm_port = 0;
+    public static int LED_strip_length = 300;
 }

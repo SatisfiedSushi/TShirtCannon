@@ -4,12 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,31 +18,37 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveTrain m_exampleSubsystem = new DriveTrain();
-
-  private final DriveCommand m_autoCommand = new DriveCommand(m_exampleSubsystem, null, null, null);
+  public static XboxController controller;
+  private DriveTrain driveTrain;
+  public static Shooter shooter;
+  private ParallelCommandGroup teleopCommand;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
+    controller = new XboxController(0);
+
+    driveTrain = new DriveTrain();
+
+    shooter = new Shooter();
+    
+    teleopCommand = new ParallelCommandGroup(
+      new DriveCommand(driveTrain, ()-> -controller.getLeftY(), ()-> controller.getRightX(), ()-> controller.getRawButton(1))
+
+    );
   }
-
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {}
-
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
-   * @return the command to run in autonomous
+   * @return the command to run in autonomous mode
    */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+  
+  /**
+   * Use this to pass the teleop command to the main {@link Robot} class.
+   * 
+   * @return the command to run in teleoperated mode
+   */
+  public Command getTeleopCommand() {
+    return teleopCommand;
   }
 }

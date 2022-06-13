@@ -5,28 +5,105 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import frc.robot.Constants;
-import frc.robot.RobotMap;
+import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+//put auto shutting off compressor stuff here
 
 public class Shooter extends SubsystemBase {
-  DoubleSolenoid pitchSolenoid;
-  Solenoid fireSolenoid;
-  
+  //private Solenoid fireSolenoid;
+
+  private final Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+  public AnalogPotentiometer analog_pressure_sensor;
+
+  private XboxController xbox;
+
+  private WaitCommand wait = new WaitCommand(0.25);
+
+  public int target_pressure = 30;
+
+  public boolean ready = false;
+ 
   public Shooter() {
-    //pitchSolenoid = new DoubleSolenoid(RobotMap.SHOOTER_PITCH_SOLENOID_DEPLOY, RobotMap.SHOOTER_PITCH_SOLENOID_RETRACT);
-    // supposed to be new DoubleSolenoid(module, moduleType, forwardChannel, reverseChannel)
-    // idk what the parameters are tho
-    pitchSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2);
-    fireSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+
+    super();
+    xbox = RobotContainer.controller;
+
+    analog_pressure_sensor = new AnalogPotentiometer(0, 250, -25);
+
+    //fireSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
     pcmCompressor.enableDigital();
     System.out.println("compressor initialized");
   }
-  private final Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+  
+  @Override
+  public void periodic() {
+    super.periodic();
+
+    if (xbox.getXButton()) {
+      fire();
+    }
+    if (xbox.getYButton()) {
+      closeSolenoid();
+    }
+    if (xbox.getBButton()) {
+      CompressorOff();
+    }
+    if (xbox.getAButton()) {
+      CompressorOn();
+    }
+    if (xbox.getLeftBumperPressed()) {
+      target_pressure += 5;
+    }
+    if (xbox.getRightBumperPressed()) {
+      target_pressure -= 5;
+    }
+    if(target_pressure >= airPressureReading()) {
+      CompressorOff();
+      if(!overTargetPressure()) {
+        ready = true; //ready to fire!
+      }
+    }
+
+    SmartDashboard.putNumber("Target Pressure", target_pressure);
+    SmartDashboard.putNumber("Air Pressure Reading", airPressureReading());
+  }
+
+  public double airPressureReading() {
+    return analog_pressure_sensor.get();
+  }
+
+  public boolean overTargetPressure() {
+    if (airPressureReading() >= target_pressure + 5) { 
+      //the analog air pressure sensor can very around 1-2 psi of accuracy 
+      //when the compressor is on, and the compressor might be automatically shutoff 1-2 psi above the target pressure
+      //that's fine, and the actual shouldn't be 5 psi above the target pressure anyway, 
+      //but if it does happen to be, for whatever other reason, we can give a little warning
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public void fire() {
+    //fireSolenoid.set(true);
+    wait.initialize();
+    //fireSolenoid.set(false);
+  }
+
+  public void closeSolenoid() {
+    //fireSolenoid.set(false);
+  }
+
+  public boolean CompressorStatus() {
+    return pcmCompressor.enabled();
+  }
 
   public void CompressorOn() {
     pcmCompressor.enableDigital();
@@ -63,9 +140,5 @@ public class Shooter extends SubsystemBase {
   public double pressureAtmToPsi(double atm) {
     return atm * 14.6959;
   }
-
-  boolean enabled = pcmCompressor.enabled();
-  boolean pressureSwitch = pcmCompressor.getPressureSwitchValue();
-  double current = pcmCompressor.getCurrent();
 
 }
