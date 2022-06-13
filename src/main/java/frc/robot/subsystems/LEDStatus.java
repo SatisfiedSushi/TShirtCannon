@@ -27,32 +27,26 @@ public class LEDStatus extends SubsystemBase {
 
         super.periodic();
 
-        //when air is being loaded
-        if (shooter.CompressorStatus()) {
+        //controls for when the robot is moving
+        if (xbox.getLeftY() != 0 || xbox.getRightX() != 0) {
+            m_leds.BlinkingPattern(Color.kRed);
+            m_leds.setPattern();
+        } else if (shooter.CompressorStatus()) {  //when air is being loaded
             m_leds.AlternatingMaroonAndWhiteLEDBuffer();
             m_leds.setAnimatedPattern();
         } else if (shooter.ready && !shooter.overTargetPressure()) { //ready to fire!
             m_leds.BlueAndMaroonChaseLEDBuffer();
             m_leds.setAnimatedPattern();
-        }
-
-        //when there more air than you want
-        if (shooter.overTargetPressure()) {
+        } else if (shooter.overTargetPressure()) {  //when there more air than you want
             m_leds.BlinkingPattern(Color.kYellow);
             m_leds.setPattern();
-        }
-        
-        //when robot is not filled to target pressure and the compressor isn't on
-        if (!shooter.CompressorStatus() && !shooter.overTargetPressure() && !shooter.ready) {
+        } else if (!shooter.CompressorStatus() && !shooter.overTargetPressure() && !shooter.ready) {
+            //when robot is not filled to target pressure and the compressor isn't on
             m_leds.BlinkingPattern(Color.kLightPink);
             m_leds.setPattern();
         }
     
-        //controls for when the robot is moving
-        if (xbox.getLeftY() != 0 || xbox.getRightX() != 0) {
-            m_leds.BlinkingPattern(Color.kRed);
-            m_leds.setPattern();
-        }
+        
 
     }
 }

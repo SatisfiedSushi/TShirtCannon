@@ -13,6 +13,9 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 //put auto shutting off compressor stuff here
 
@@ -21,6 +24,8 @@ public class Shooter extends SubsystemBase {
 
   private final Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
   public AnalogPotentiometer analog_pressure_sensor;
+
+  public TalonSRX fireSolenoid;
 
   private XboxController xbox;
 
@@ -38,6 +43,10 @@ public class Shooter extends SubsystemBase {
     analog_pressure_sensor = new AnalogPotentiometer(0, 250, -25);
 
     //fireSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+    fireSolenoid = new TalonSRX(Constants.motor_solenoid);
+    fireSolenoid.configPeakCurrentLimit(2); // so we don't kill the $900 solenoid :)
+    fireSolenoid.enableCurrentLimit(true); // config stuff like this varies between motor controllers like Spark Max and Talons, double check documentation ig
+    
     pcmCompressor.enableDigital();
     System.out.println("compressor initialized");
   }
@@ -92,13 +101,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public void fire() {
-    //fireSolenoid.set(true);
+    fireSolenoid.set(TalonSRXControlMode.PercentOutput, 1.0); // 100% = 12v, right amount of power for solenoid
     wait.initialize();
+    fireSolenoid.set(TalonSRXControlMode.PercentOutput, 0.0); // 1.0 and 0.0 opens and closes the solenoid respectively
     //fireSolenoid.set(false);
   }
 
   public void closeSolenoid() {
-    //fireSolenoid.set(false);
+    fireSolenoid.set(TalonSRXControlMode.PercentOutput, 0.0); // 1.0 and 0.0 opens and closes the solenoid respectively
   }
 
   public boolean CompressorStatus() {
