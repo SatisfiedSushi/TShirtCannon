@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase {
   DoubleSolenoid pitchSolenoid;
   TalonSRX fireSolenoid; // we're powering the solenoid with a motor controller since it needs more power than the PCM can give
   double scale = 250;
-  double offset = -27;
+  double offset = -25;
   AnalogPotentiometer pressureTransducer = new AnalogPotentiometer(0, scale, offset);
   private Compressor pcmCompressor = new Compressor(9, PneumaticsModuleType.CTREPCM);
 
