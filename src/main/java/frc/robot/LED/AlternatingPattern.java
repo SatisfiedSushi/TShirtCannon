@@ -3,8 +3,8 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class AlternatingPattern implements tshirtAddressableLEDPatternInterface {
-    
-    public int milliseconds_per_update;
+
+    public int milliseconds_per_update; //set when pattern is created
     
     private int MaroonAndWhiteBufferCounter = 0;
 
@@ -41,6 +41,10 @@ public class AlternatingPattern implements tshirtAddressableLEDPatternInterface 
 
     public boolean isAnimated() {
         return true;
+    }
+
+    public int milliseconds_per_update() {
+        return milliseconds_per_update;
     }
 
 }

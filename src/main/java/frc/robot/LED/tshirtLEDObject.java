@@ -49,11 +49,14 @@ public class tshirtLEDObject {
                 };
                 timer.scheduleAtFixedRate(
                         task,
-                        20, // run first occurrence in 20ms
-                        current_pattern.milliseconds_per_update
+                        0, // time until first occurrence 
+                        current_pattern.milliseconds_per_update()
                     ); 
+            } else {
+                updateBufferAndLED();
             }
-            updateBufferAndLED();
+
+           
         }
 
     }

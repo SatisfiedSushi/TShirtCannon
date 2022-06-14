@@ -8,7 +8,7 @@ public class BlinkingPattern implements tshirtAddressableLEDPatternInterface {
     
     public double interval; //interval between blinks in seconds
     
-    public int milliseconds_per_update = 1000; 
+    public int milliseconds_per_update = 100; 
     //^^^ how many milliseconds between each update, geared towards scheduling update tasks in tshirtLEDObject.java
 
     private boolean on = true;
@@ -29,7 +29,7 @@ public class BlinkingPattern implements tshirtAddressableLEDPatternInterface {
         
         double timestamp = Timer.getFPGATimestamp();
 
-		if (timestamp- lastChange > interval){
+		if (timestamp - lastChange > interval){
 			on = !on;
 			lastChange = timestamp;
 		}
@@ -44,5 +44,7 @@ public class BlinkingPattern implements tshirtAddressableLEDPatternInterface {
         return true;
     }
 
-    
+    public int milliseconds_per_update() {
+        return milliseconds_per_update;
+    }
 }

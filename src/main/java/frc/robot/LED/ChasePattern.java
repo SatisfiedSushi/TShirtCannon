@@ -36,4 +36,8 @@ public class ChasePattern implements tshirtAddressableLEDPatternInterface {
     public boolean isAnimated() {
         return true;
     }
+
+    public int milliseconds_per_update() {
+        return milliseconds_per_update;
+    }
 }
