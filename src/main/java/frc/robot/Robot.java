@@ -7,11 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.LEDs;
-import edu.wpi.first.wpilibj.util.Color;
 
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -24,8 +20,6 @@ public class Robot extends TimedRobot {
   private Command m_teleopCommand;
 
   private RobotContainer m_robotContainer;
-
-  public LEDs m_leds;
 
   /**
    * This function is run when the robot is first started up and should be used for any

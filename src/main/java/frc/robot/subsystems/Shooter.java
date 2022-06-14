@@ -14,8 +14,8 @@ import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
+//import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 //put auto shutting off compressor stuff here
@@ -29,7 +29,8 @@ public class Shooter extends SubsystemBase {
 
   private XboxController xbox;
 
-  private WaitCommand wait = new WaitCommand(0.250);
+  private WaitCommand wait = new WaitCommand(0.025); //25 milliseconds
+  //^^^ name is misleading, its more like a timer, and you call isFinished to see if it's done
 
   public int target_pressure = 30;
 
@@ -60,6 +61,7 @@ public class Shooter extends SubsystemBase {
 
     if(xbox.getAButton()) {
       CompressorOn();
+      ready = false;
     }
     if(xbox.getBButton()) {
       CompressorOff();
@@ -107,8 +109,14 @@ public class Shooter extends SubsystemBase {
 
   public void fire() {
     fireSolenoid.set(TalonSRXControlMode.PercentOutput, 1.0); // 1.0 and 0.0 opens and closes the solenoid respectively
-    //wait.initialize();
-    //fireSolenoid.set(TalonSRXControlMode.PercentOutput, 0.0); // 1.0 and 0.0 opens and closes the solenoid respectively
+    wait.initialize();
+    while (true) {
+      if (wait.isFinished()) {
+        fireSolenoid.set(TalonSRXControlMode.PercentOutput, 0.0); // 1.0 and 0.0 opens and closes the solenoid respectively
+        break;
+      }
+    }
+    
   }
 
   public void closeSolenoid() {
