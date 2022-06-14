@@ -1,0 +1,2 @@
+We modeled our LED code (with our own changes ofc) after Team 5013: https://github.com/FRC-5013-Park-Hill-Robotics/5013-RapidReact/tree/main/src/main/java/frc/robot/trobot5013lib/led
+^^^ Thank you so much for open sourcing your awesome code!!!
