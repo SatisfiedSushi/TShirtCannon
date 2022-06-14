@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LEDs;
 import edu.wpi.first.wpilibj.util.Color;
 
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -34,6 +36,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    
   }
 
   /**
@@ -56,8 +60,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
 
-    m_leds.setSolidColor(Color.kRed);
-    m_leds.setPattern();
+    //m_leds.setSolidColor(Color.kRed);
+    //m_leds.setPattern();
 
   }
 
@@ -81,6 +85,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+
+    m_teleopCommand = m_robotContainer.getTeleopCommand();
+
+    // Schedule teleop command
+    if(m_teleopCommand != null) {
+      m_teleopCommand.schedule();
+    }
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -94,12 +106,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    m_teleopCommand = m_robotContainer.getTeleopCommand();
 
-    // Schedule teleop command
-    if(m_teleopCommand != null) {
-      m_teleopCommand.schedule();
-    }
 
   }
 

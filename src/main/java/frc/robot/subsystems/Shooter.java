@@ -14,17 +14,22 @@ import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 //put auto shutting off compressor stuff here
 
 public class Shooter extends SubsystemBase {
-  //private Solenoid fireSolenoid;
+  TalonSRX fireSolenoid; // we're powering the solenoid with a motor controller since it needs more power than the PCM can give
+  
 
-  private final Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+  private final Compressor pcmCompressor = new Compressor(Constants.CompressorID, PneumaticsModuleType.CTREPCM);
   public AnalogPotentiometer analog_pressure_sensor;
 
   private XboxController xbox;
 
-  private WaitCommand wait = new WaitCommand(0.25);
+  private WaitCommand wait = new WaitCommand(0.250);
 
   public int target_pressure = 30;
 
@@ -33,12 +38,19 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
 
     super();
+
+    fireSolenoid = new TalonSRX(5);
+    fireSolenoid.configPeakCurrentLimit(2); // so we don't kill the $900 solenoid :)
+    fireSolenoid.enableCurrentLimit(true); // config stuff like this varies between motor controllers like Spark Max and Talons, double check documentation ig
+    
+    CompressorOff(); //so compressor doesn't automatically start
+
     xbox = RobotContainer.controller;
 
     analog_pressure_sensor = new AnalogPotentiometer(0, 250, -25);
 
     //fireSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-    pcmCompressor.enableDigital();
+    //pcmCompressor.enableDigital();
     System.out.println("compressor initialized");
   }
   
@@ -46,25 +58,27 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     super.periodic();
 
-    if (xbox.getXButton()) {
-      fire();
-    }
-    if (xbox.getYButton()) {
-      closeSolenoid();
-    }
-    if (xbox.getBButton()) {
-      CompressorOff();
-    }
-    if (xbox.getAButton()) {
+    if(xbox.getAButton()) {
       CompressorOn();
     }
+    if(xbox.getBButton()) {
+      CompressorOff();
+    }
+
+    if(xbox.getXButton()) {
+      fire();
+    }
+    if(xbox.getYButton()) {
+      closeSolenoid();
+    }
+
     if (xbox.getLeftBumperPressed()) {
       target_pressure += 5;
     }
     if (xbox.getRightBumperPressed()) {
       target_pressure -= 5;
     }
-    if(target_pressure >= airPressureReading()) {
+    if(target_pressure <= airPressureReading()) {
       CompressorOff();
       if(!overTargetPressure()) {
         ready = true; //ready to fire!
@@ -92,13 +106,13 @@ public class Shooter extends SubsystemBase {
   }
 
   public void fire() {
-    //fireSolenoid.set(true);
-    wait.initialize();
-    //fireSolenoid.set(false);
+    fireSolenoid.set(TalonSRXControlMode.PercentOutput, 1.0); // 1.0 and 0.0 opens and closes the solenoid respectively
+    //wait.initialize();
+    //fireSolenoid.set(TalonSRXControlMode.PercentOutput, 0.0); // 1.0 and 0.0 opens and closes the solenoid respectively
   }
 
   public void closeSolenoid() {
-    //fireSolenoid.set(false);
+    fireSolenoid.set(TalonSRXControlMode.PercentOutput, 0.0); // 1.0 and 0.0 opens and closes the solenoid respectively
   }
 
   public boolean CompressorStatus() {
