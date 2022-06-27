@@ -23,7 +23,7 @@ public class AlternatingPattern implements tshirtAddressableLEDPatternInterface 
             
             buffer.setLED(index, color_pattern[pattern_counter]);
 
-            if (pattern_counter >= 7) {
+            if (pattern_counter >= color_pattern.length - 1) {
                 pattern_counter = 0;
             } else {
                 pattern_counter++;
@@ -32,7 +32,7 @@ public class AlternatingPattern implements tshirtAddressableLEDPatternInterface 
         } 
         //MaroonAndWhiteBufferCounter is used to give an animated look. 
         //Everytime this function is called, MaroonAndWhiteBufferCounter is used to tell on which part of the array pattern_counter should start
-        if (MaroonAndWhiteBufferCounter >= 7) {
+        if (MaroonAndWhiteBufferCounter >= color_pattern.length - 1) {
             MaroonAndWhiteBufferCounter = 0;
         } else {
             MaroonAndWhiteBufferCounter++;
