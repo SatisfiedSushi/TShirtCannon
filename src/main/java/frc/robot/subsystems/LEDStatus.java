@@ -22,7 +22,6 @@ public class LEDStatus extends SubsystemBase {
 
     Color[] chaos_colors = {Color.kMaroon, Color.kBlue, Color.kBlack};
 
-    private tshirtAddressableLEDPatternInterface BlueAndMaroonChasePattern = new ChasePattern(chase_colors, 600);
     private tshirtAddressableLEDPatternInterface MaroonAndWhiteAlternatingPattern = new AlternatingPattern(alternating_pattern, 100);
     private tshirtAddressableLEDPatternInterface ChaosPattern = new ChaosPattern(chaos_colors, 50);
     private tshirtAddressableLEDPatternInterface CoralBlinkingPattern = new BlinkingPattern(Color.kCoral, 0.5);
