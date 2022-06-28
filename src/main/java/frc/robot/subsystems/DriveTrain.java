@@ -23,8 +23,8 @@ public class DriveTrain extends SubsystemBase {
     m_right1 = new WPI_TalonFX(Constants.motor_right1);
     m_right2 = new WPI_TalonFX(Constants.motor_right2);
 
-    m_right1.setInverted(TalonFXInvertType.Clockwise); // one side runs clockwise, other runs counterclockwise
-    m_right2.setInverted(TalonFXInvertType.Clockwise); // since the motors are facing opposite directions
+    m_left1.setInverted(TalonFXInvertType.Clockwise); // one side runs clockwise, other runs counterclockwise
+    m_left2.setInverted(TalonFXInvertType.Clockwise); // since the motors are facing opposite directions
 
     m_left1.setNeutralMode(NeutralMode.Brake); // only one motor brakes on each side for a weaker brake effect
     m_left2.setNeutralMode(NeutralMode.Coast);

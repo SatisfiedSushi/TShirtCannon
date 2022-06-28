@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
 
   private XboxController xbox;
 
-  private WaitCommand wait = new WaitCommand(0.025); //25 milliseconds
+  private WaitCommand wait = new WaitCommand(0.1); //25 milliseconds
   //^^^ name is misleading, its more like a timer, and you call isFinished to see if it's done
 
   public int target_pressure = 30;
