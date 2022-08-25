@@ -35,8 +35,9 @@ public class RobotContainer {
     leds = new LEDStatus();
     
     teleopCommand = new ParallelCommandGroup(
-      new DriveCommand(driveTrain, ()-> -controller.getLeftY(), ()-> controller.getRightX(), ()-> controller.getRawButton(1))
+      new DriveCommand(driveTrain, ()-> -controller.getLeftY(), ()-> controller.getRightX(), ()-> controller.getRawButton(1)),
       //new ShootCommand(shooter, controller.getXButton(), controller.getYButton(), controller.getAButton(), controller.getBButton())
+      new CompressorCommand(controller)
     );
   }
   

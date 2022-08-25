@@ -24,6 +24,8 @@ public final class Constants {
 
     public static int CompressorID = 9;
 
+    public static int defaultCompressorTargetLimit = 40; //in PSI
+
     // Encoder stuffs
     public static double driveGearing = 1.0/60.0;
 
