@@ -33,6 +33,7 @@ public class CompressorCommand extends CommandBase{
     
     public double airPressureReading() {
         return analog_pressure_sensor.get();
+    }
 
     @Override
     public void initialize() {}
