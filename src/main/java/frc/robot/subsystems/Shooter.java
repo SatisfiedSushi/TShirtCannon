@@ -7,10 +7,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Compressor;
+//import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.Controller;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+//import frc.robot.commands.CompressorCommand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -24,15 +26,18 @@ public class Shooter extends SubsystemBase {
   TalonSRX fireSolenoid; // we're powering the solenoid with a motor controller since it needs more power than the PCM can give
   
 
-  private final Compressor pcmCompressor = new Compressor(Constants.CompressorID, PneumaticsModuleType.CTREPCM);
+  //private final Compressor pcmCompressor = new Compressor(Constants.CompressorID, PneumaticsModuleType.CTREPCM);
+  
   public AnalogPotentiometer analog_pressure_sensor;
 
   private XboxController xbox;
+  private final Compressor compressor = new Compressor();
 
   private WaitCommand wait = new WaitCommand(0.1); //25 milliseconds
   //^^^ name is misleading, its more like a timer, and you call isFinished to see if it's done
 
-  public int target_pressure = 30;
+  public int target_pressure = 50;
+  public int target_pressure_hard_limit = 190;
 
   public boolean ready = false;
  
@@ -41,14 +46,14 @@ public class Shooter extends SubsystemBase {
     super();
 
     fireSolenoid = new TalonSRX(5);
-    fireSolenoid.configPeakCurrentLimit(2); // so we don't kill the $900 solenoid :)
+    fireSolenoid.configPeakCurrentLimit(1); // so we don't kill the $900 solenoid :)
     fireSolenoid.enableCurrentLimit(true); // config stuff like this varies between motor controllers like Spark Max and Talons, double check documentation ig
     
     CompressorOff(); //so compressor doesn't automatically start
 
     xbox = RobotContainer.controller;
 
-    analog_pressure_sensor = new AnalogPotentiometer(0, 250, -25);
+    analog_pressure_sensor = new AnalogPotentiometer(1, 250, -25);
 
     //fireSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
     //pcmCompressor.enableDigital();
@@ -71,14 +76,21 @@ public class Shooter extends SubsystemBase {
       fire();
     }
     if(xbox.getYButton()) {
-      closeSolenoid();
+      closeSolenoid();  
     }
 
     if (xbox.getLeftBumperPressed()) {
-      target_pressure += 5;
+      if (target_pressure <= target_pressure_hard_limit) {
+        target_pressure += 5;
+      }
+      
+      System.out.println(target_pressure);
     }
     if (xbox.getRightBumperPressed()) {
-      target_pressure -= 5;
+      if (target_pressure >= 5) {
+        target_pressure -= 5;
+      }
+      System.out.println(target_pressure);
     }
     if(target_pressure <= airPressureReading()) {
       CompressorOff();
@@ -124,14 +136,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean CompressorStatus() {
-    return pcmCompressor.enabled();
+    return compressor.CompressorStatus();
   }
 
   public void CompressorOn() {
-    pcmCompressor.enableDigital();
+    compressor.CompressorOn();
   }
   public void CompressorOff() {
-    pcmCompressor.disable();
+    compressor.CompressorOff();
   }
 
   /**

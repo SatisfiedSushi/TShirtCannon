@@ -1,4 +1,4 @@
-package frc.robot.commands;
+/*package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Controller;
@@ -18,6 +18,7 @@ public class CompressorCommand extends CommandBase{
     AnalogPotentiometer analog_pressure_sensor;
     boolean compressorState = false;
     int currentCompressorLimit = Constants.defaultCompressorTargetLimit;
+    boolean isFinished = false;
 
     private double getRightTriggerAxis() {
         return 	controller.getRightTriggerAxis();
@@ -40,7 +41,7 @@ public class CompressorCommand extends CommandBase{
 
     @Override
     public void execute() {
-        if (airPressureReading() >= 50 && compressorState == true) { //195 psi is the hardlimit
+        /*if (airPressureReading() >= 195 && compressorState == true) { //195 psi is the hardlimit
             compressor.CompressorOff();
             compressorState = false;
         } else if (airPressureReading() >= currentCompressorLimit && compressorState == true) {
@@ -51,9 +52,17 @@ public class CompressorCommand extends CommandBase{
             compressorState = true;
         }
 
-        if (getRightTriggerAxis() >= 0.01 && RightDebounce == false && currentCompressorLimit <= 49) {
+        if (airPressureReading() >= currentCompressorLimit) {
+            compressor.CompressorOff();
+            isFinished = true;
+        } else if (isFinished == false){
+            compressor.CompressorOn();
+        }
+
+        if (getRightTriggerAxis() >= 0.01 && RightDebounce == false && currentCompressorLimit <= 194) {
             RightDebounce = true;
             currentCompressorLimit = currentCompressorLimit + 1;
+            System.out.println(currentCompressorLimit);
         } else if (getRightTriggerAxis() < 0.01 && RightDebounce == true) {
             RightDebounce = false;
         }
@@ -61,6 +70,7 @@ public class CompressorCommand extends CommandBase{
         if (getLeftTriggerAxis() >= 0.01 && leftDebounce == false && currentCompressorLimit >= 1) {
             leftDebounce = true;
             currentCompressorLimit = currentCompressorLimit - 1;
+            System.out.println(currentCompressorLimit);
         } else if (getLeftTriggerAxis() < 0.01 && leftDebounce == true) {
             leftDebounce = false;
         }
@@ -71,6 +81,6 @@ public class CompressorCommand extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return false;
+        return isFinished;
     }
-}
+}*/

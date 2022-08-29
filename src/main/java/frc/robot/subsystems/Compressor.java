@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 
 public class Compressor extends SubsystemBase {
     TalonSRX compressor;
+    boolean compressorStatus = false;
 
     public Compressor() {
         compressor = new TalonSRX(5);
@@ -16,9 +17,15 @@ public class Compressor extends SubsystemBase {
 
     public void CompressorOn() {
         compressor.set(TalonSRXControlMode.PercentOutput, 1.0);
+        compressorStatus = true;
     }
 
     public void CompressorOff() {
         compressor.set(TalonSRXControlMode.PercentOutput, 0);
+        compressorStatus = false;
+    }
+
+    public boolean CompressorStatus() {
+        return compressorStatus;
     }
 }
